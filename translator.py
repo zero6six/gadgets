@@ -72,7 +72,7 @@ root = tk.Tk()
 # 设置窗口标题
 root.title("OCR 翻译")
 # 设置窗口大小
-root.geometry("400x600") # 在屏幕左上角往右 250px，往下 350px 打开窗口
+root.geometry("400x600")
 root.attributes('-topmost', 1) # 窗口置顶
 root.resizable(width=False, height=False)
 
