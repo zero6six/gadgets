@@ -6,10 +6,13 @@ def compute():
     loss = int(loss_entry.get())
     distance = int(distance_entry.get())
 
-    line1 = f'在 GTCEu 中，一个小方块机器最大接收 2A 电流，每 A 电流都会损失线损 x 距离的电流。\n'
-    line2 = f'按照输入的数据计算，总最小输出功率为 {(voltage-loss*distance)*amperage} eu/t，一台小机器最大接收 {voltage*2} eu/t。'
+    line1 = '在 GTCEu 中，一个小方块机器最大接收 2A 电流，每 A 电流都会损失线损 x 距离的电流。\n'
+    line2 = '按照输入的数据计算：\n'
+    line3 = f'线损最大时最大输出功率为 {(voltage-loss*distance)*amperage} eu/t\n'
+    line4 = f'线损后单机器接收功率为 {(voltage-loss*distance)*2} eu/t\n'
+    line5 = f'无线损时单机器最大接收 {voltage*2} eu/t。'
     output_text.delete(1.0, tk.END)
-    output_text.insert(tk.END, line1+line2)
+    output_text.insert(tk.END, line1+line2+line3+line4+line5)
 
 # 创建一个窗口对象
 root = tk.Tk()
