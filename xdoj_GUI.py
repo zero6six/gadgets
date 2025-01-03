@@ -207,8 +207,6 @@ class App:
         t = int(round(time.time() * 1000))
         params  = {'contestId': self.contestId, 'userId': self.userId, '_search': 'false', 'nd': t, 'rows': '10', 'page': page, 'sidx': '', 'sord': 'asc'}
         response = self.session.get(self.URL+'/xdoj-ssm/contest/problems.do', params=params).json()
-        print(response)
-
         totalpages = response['totalpages']
         for i in response['data']:
             if i['userAcceptCount'] == 0:
