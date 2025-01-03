@@ -14,7 +14,7 @@ class App:
 
     def __init__(self, root):
         self.root = root        # 初始化传入一个 tkinter 根窗口。
-        self.root.title("空窗口")  
+        self.root.title("XDOJ Helper")  
         self.root.geometry("1366x768+50+50")  
         self.root.resizable(width=False, height=False)  
   
@@ -127,15 +127,16 @@ class App:
             self.refresh_button = tk.Button(self.rightUpFrame, text="刷新", command=lambda: self.set_tree_problems(page=self.page_entry.get()))
             self.refresh_button.pack(side='left')
 
-            self.tree = ttk.Treeview(self.rightDownFrame, columns=('isAccept', 'title'))
+            self.tree = ttk.Treeview(self.rightDownFrame, columns=('isAccept', 'title', 'categoryName'))
             self.tree.heading('#0', text='编号')
             self.tree.heading('#1', text='完成情况')
             self.tree.heading('#2', text='标题')
+            self.tree.heading('#3', text='题目类型')
             self.tree.bind("<<TreeviewSelect>>", tree_select_problemId)
             self.set_tree_problems(self.page_entry.get())
             self.tree.pack(side=tk.TOP)
 
-            self.text = tk.Text(self.rightDownFrame)
+            self.text = tk.Text(self.rightDownFrame, font=('微软雅黑', 10))
             self.text.pack(side=tk.BOTTOM)
             
         if self.var.get() == 4:
@@ -190,6 +191,7 @@ class App:
             self.update_widgets()
 
     def set_tree_contests(self, page='1'):
+        '''设置测试列表的 treeview 控件。'''
         self.tree.delete(*self.tree.get_children())
         t = int(round(time.time() * 1000))
         data = {'_search': 'false', 'nd':t, 'rows': '10', 'page': page, 'sidx':'', 'sord': 'asc'}
@@ -200,17 +202,20 @@ class App:
         self.page_label.config(text='of '+str(totalpages))
 
     def set_tree_problems(self, page='1'):
+        '''设置题目列表的 treeview 控件。'''
         self.tree.delete(*self.tree.get_children())
         t = int(round(time.time() * 1000))
         params  = {'contestId': self.contestId, 'userId': self.userId, '_search': 'false', 'nd': t, 'rows': '10', 'page': page, 'sidx': '', 'sord': 'asc'}
         response = self.session.get(self.URL+'/xdoj-ssm/contest/problems.do', params=params).json()
+        print(response)
+
         totalpages = response['totalpages']
         for i in response['data']:
             if i['userAcceptCount'] == 0:
                 correct_sign = '×'
             else:
                 correct_sign = '✓'
-            self.tree.insert("", index='end', text=i['id'], values=(correct_sign, i['title']))
+            self.tree.insert("", index='end', text=i['id'], values=(correct_sign, i['title'], i['categoryName']))
         self.page_label.config(text='of '+str(totalpages))
 
     def set_tree_submits(self, page='1'):
